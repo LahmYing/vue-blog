@@ -1,0 +1,268 @@
+/* 全局样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f5f5f5;
+  transition: all 0.3s ease;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.header {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo a {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+}
+
+.nav a {
+  color: #666;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+.nav a:hover {
+  color: #333;
+}
+
+.main {
+  padding: 40px 0;
+  min-height: 70vh;
+  transition: all 0.3s ease;
+}
+
+.footer {
+  background-color: #333;
+  color: #fff;
+  padding: 40px 0;
+  margin-top: 60px;
+  transition: all 0.3s ease;
+}
+
+.footer p {
+  text-align: center;
+}
+
+/* 暗黑主题样式 */
+.app.dark-mode {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+.app.dark-mode .header {
+  background-color: #2d2d2d;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.app.dark-mode .logo a {
+  color: #e0e0e0;
+}
+
+.app.dark-mode .nav a {
+  color: #b0b0b0;
+}
+
+.app.dark-mode .nav a:hover {
+  color: #ffffff;
+}
+
+.app.dark-mode .main {
+  background-color: #1a1a1a;
+}
+
+.app.dark-mode .container {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+.app.dark-mode .footer {
+  background-color: #2d2d2d;
+}
+
+/* 主题切换按钮 */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.app.dark-mode .theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 确保所有链接在暗黑模式下都有正确的颜色 */
+.app.dark-mode a {
+  color: #00aaff;
+  transition: color 0.3s ease;
+}
+
+.app.dark-mode a:hover {
+  color: #00ccff;
+}
+
+/* 文章卡片样式 */
+.app.dark-mode .post-item {
+  background-color: #2d2d2d !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  color: #e0e0e0 !important;
+}
+
+.app.dark-mode .post-title {
+  color: #e0e0e0 !important;
+}
+
+.app.dark-mode .post-title a {
+  color: #e0e0e0 !important;
+}
+
+.app.dark-mode .post-meta {
+  color: #b0b0b0 !important;
+  border-bottom: 1px solid #404040 !important;
+}
+
+.app.dark-mode .post-body {
+  color: #e0e0e0 !important;
+}
+
+.app.dark-mode .post-body h2,
+.app.dark-mode .post-body h3 {
+  color: #ffffff !important;
+}
+
+.app.dark-mode .post-body p {
+  color: #e0e0e0 !important;
+}
+
+.app.dark-mode .post-content {
+  background-color: #2d2d2d !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  color: #e0e0e0 !important;
+}
+
+.app.dark-mode .tag {
+  background-color: #404040 !important;
+}
+
+.app.dark-mode .tag a {
+  color: #b0b0b0 !important;
+}
+
+.app.dark-mode .tag a:hover {
+  color: #ffffff !important;
+}
+
+.app.dark-mode .sidebar-item {
+  background-color: #2d2d2d !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  color: #e0e0e0 !important;
+}
+
+.app.dark-mode .sidebar-item h3 {
+  color: #e0e0e0 !important;
+}
+
+.app.dark-mode .loading,
+.app.dark-mode .error,
+.app.dark-mode .empty {
+  color: #b0b0b0 !important;
+}
+
+.app.dark-mode .pagination button {
+  border: 1px solid #404040 !important;
+  background-color: #2d2d2d !important;
+  color: #e0e0e0 !important;
+}
+
+.app.dark-mode .pagination button:hover:not(:disabled) {
+  background-color: #404040 !important;
+}
+
+/* Archive 页面样式 */
+.app.dark-mode .archive h1 {
+  color: #e0e0e0 !important;
+}
+
+.app.dark-mode .year {
+  color: #ffffff !important;
+  border-bottom: 1px solid #404040 !important;
+}
+
+.app.dark-mode .month-title {
+  color: #b0b0b0 !important;
+}
+
+.app.dark-mode .post-date {
+  color: #b0b0b0 !important;
+}
+
+/* Tag 页面样式 */
+.app.dark-mode .tag h1 {
+  color: #e0e0e0 !important;
+}
+
+.app.dark-mode .all-tags {
+  border-top: 1px solid #404040 !important;
+}
+
+.app.dark-mode .all-tags h3 {
+  color: #e0e0e0 !important;
+}
+
+/* 淡入淡出动画 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
