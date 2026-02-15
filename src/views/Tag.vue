@@ -5,25 +5,32 @@
       <div v-if="loading" class="loading">加载中...</div>
       <div v-else-if="posts.length === 0" class="empty">该标签下暂无文章</div>
       <div v-else class="post-list">
-        <div v-for="post in posts" :key="post.id" class="post-item">
-          <h2 class="post-title">
-            <router-link :to="`/post/${post.id}`">{{ post.title }}</router-link>
-          </h2>
+        <router-link
+          v-for="post in posts"
+          :key="post.id"
+          :to="`/post/${post.id}`"
+          class="post-item"
+        >
+          <h2 class="post-title">{{ post.title }}</h2>
           <div class="post-meta">
             <span class="post-date">{{ post.date }}</span>
             <span class="post-tags">
               <span v-for="tag in post.tags" :key="tag" class="tag">
-                <router-link :to="`/tag/${encodeURIComponent(tag)}`">{{ tag }}</router-link>
+                <router-link :to="`/tag/${encodeURIComponent(tag)}`">{{
+                  tag
+                }}</router-link>
               </span>
             </span>
           </div>
-        </div>
+        </router-link>
       </div>
       <div class="all-tags">
         <h3>所有标签</h3>
         <div class="tag-cloud">
           <span v-for="tag in allTags" :key="tag.name" class="tag">
-            <router-link :to="`/tag/${encodeURIComponent(tag.name)}`">{{ tag.name }} ({{ tag.count }})</router-link>
+            <router-link :to="`/tag/${encodeURIComponent(tag.name)}`"
+              >{{ tag.name }} ({{ tag.count }})</router-link
+            >
           </span>
         </div>
       </div>
@@ -32,45 +39,45 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { getPostsByTag, getTags } from '../services/postService'
+import { ref, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
+import { getPostsByTag, getTags } from "../services/postService";
 
-const route = useRoute()
+const route = useRoute();
 
-const posts = ref([])
-const loading = ref(true)
-const allTags = ref([])
+const posts = ref([]);
+const loading = ref(true);
+const allTags = ref([]);
 
 const loadPosts = async () => {
-  const tagName = route.params.tag
-  loading.value = true
+  const tagName = route.params.tag;
+  loading.value = true;
   try {
     // 获取指定标签的文章
-    const taggedPosts = await getPostsByTag(tagName)
-    posts.value = taggedPosts
-    
+    const taggedPosts = await getPostsByTag(tagName);
+    posts.value = taggedPosts;
+
     // 获取所有标签
-    const tags = await getTags()
-    allTags.value = tags
+    const tags = await getTags();
+    allTags.value = tags;
   } catch (error) {
-    console.error('Error loading posts by tag:', error)
+    console.error("Error loading posts by tag:", error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 // 监听路由参数变化
 watch(
   () => route.params.tag,
   () => {
-    loadPosts()
+    loadPosts();
   }
-)
+);
 
 onMounted(() => {
-  loadPosts()
-})
+  loadPosts();
+});
 </script>
 
 <style scoped>
@@ -104,8 +111,11 @@ onMounted(() => {
 }
 
 .post-item {
+  display: block;
   padding: 20px 0;
   border-bottom: 1px solid #eee;
+  text-decoration: none;
+  color: inherit;
 }
 
 .post-item:last-child {
@@ -115,16 +125,6 @@ onMounted(() => {
 .post-title {
   font-size: 20px;
   margin-bottom: 10px;
-}
-
-.post-title a {
-  color: #333;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.post-title a:hover {
-  color: #007bff;
 }
 
 .post-meta {
@@ -205,21 +205,19 @@ onMounted(() => {
   .tag-content {
     padding: 20px;
   }
-  
+
   .tag h1 {
     font-size: 24px;
   }
-  
+
   .post-meta {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
-  
+
   .post-tags {
     margin-top: 5px;
   }
 }
-
-
 </style>

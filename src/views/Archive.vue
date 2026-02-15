@@ -3,18 +3,34 @@
     <h1>归档</h1>
     <div class="archive-content">
       <div v-if="loading" class="loading">加载中...</div>
-      <div v-else-if="Object.keys(groupedPosts).length === 0" class="empty">暂无文章</div>
+      <div v-else-if="Object.keys(groupedPosts).length === 0" class="empty">
+        暂无文章
+      </div>
       <div v-else>
-        <div v-for="(yearPosts, year) in groupedPosts" :key="year" class="year-group">
+        <div
+          v-for="(yearPosts, year) in groupedPosts"
+          :key="year"
+          class="year-group"
+        >
           <h2 class="year">{{ year }}</h2>
           <div class="month-group">
-            <div v-for="(monthPosts, month) in yearPosts" :key="month" class="month">
+            <div
+              v-for="(monthPosts, month) in yearPosts"
+              :key="month"
+              class="month"
+            >
               <h3 class="month-title">{{ month }}</h3>
               <ul class="post-list">
-                <li v-for="post in monthPosts" :key="post.id" class="post-item">
-                  <router-link :to="`/post/${post.id}`">{{ post.title }}</router-link>
+                <router-link
+                  v-for="post in monthPosts"
+                  :key="post.id"
+                  :to="`/post/${post.id}`"
+                  class="post-item"
+                  tag="li"
+                >
+                  <span class="post-title">{{ post.title }}</span>
                   <span class="post-date">{{ post.date }}</span>
-                </li>
+                </router-link>
               </ul>
             </div>
           </div>
@@ -25,27 +41,27 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { getArchive } from '../services/postService'
+import { ref, computed, onMounted } from "vue";
+import { getArchive } from "../services/postService";
 
-const groupedPosts = ref({})
-const loading = ref(true)
+const groupedPosts = ref({});
+const loading = ref(true);
 
 const loadArchive = async () => {
-  loading.value = true
+  loading.value = true;
   try {
-    const archiveData = await getArchive()
-    groupedPosts.value = archiveData
+    const archiveData = await getArchive();
+    groupedPosts.value = archiveData;
   } catch (error) {
-    console.error('Error loading archive:', error)
+    console.error("Error loading archive:", error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 onMounted(() => {
-  loadArchive()
-})
+  loadArchive();
+});
 </script>
 
 <style scoped>
@@ -106,21 +122,21 @@ onMounted(() => {
   align-items: center;
   padding: 10px 0;
   border-bottom: 1px dashed #eee;
+  text-decoration: none;
+  color: #333;
+  transition: color 0.3s;
 }
 
 .post-item:last-child {
   border-bottom: none;
 }
 
-.post-item a {
-  color: #333;
-  text-decoration: none;
-  transition: color 0.3s;
-  flex: 1;
+.post-item:hover {
+  color: #007bff;
 }
 
-.post-item a:hover {
-  color: #007bff;
+.post-item .post-title {
+  flex: 1;
 }
 
 .post-date {
@@ -134,29 +150,27 @@ onMounted(() => {
   .archive-content {
     padding: 20px;
   }
-  
+
   .archive h1 {
     font-size: 24px;
   }
-  
+
   .year {
     font-size: 20px;
   }
-  
+
   .month-title {
     font-size: 16px;
   }
-  
+
   .post-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
   }
-  
+
   .post-date {
     margin-left: 0;
   }
 }
-
-
 </style>

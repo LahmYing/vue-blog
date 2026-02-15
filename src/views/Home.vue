@@ -6,10 +6,13 @@
           <div v-if="loading" class="loading">加载中...</div>
           <div v-else-if="posts.length === 0" class="empty">暂无文章</div>
           <div v-else>
-            <div v-for="post in posts" :key="post.id" class="post-item">
-              <h2 class="post-title">
-                <router-link :to="`/post/${post.id}`">{{ post.title }}</router-link>
-              </h2>
+            <router-link
+              v-for="post in posts"
+              :key="post.id"
+              :to="`/post/${post.id}`"
+              class="post-item"
+            >
+              <h2 class="post-title">{{ post.title }}</h2>
               <div class="post-meta">
                 <span class="post-date">{{ post.date }}</span>
                 <span class="post-tags">
@@ -18,13 +21,23 @@
                   </span>
                 </span>
               </div>
-            </div>
+            </router-link>
           </div>
         </div>
         <div class="pagination" v-if="!loading && posts.length > 0">
-          <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1">上一页</button>
+          <button
+            @click="changePage(currentPage - 1)"
+            :disabled="currentPage === 1"
+          >
+            上一页
+          </button>
           <span>{{ currentPage }} / {{ totalPages }}</span>
-          <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages">下一页</button>
+          <button
+            @click="changePage(currentPage + 1)"
+            :disabled="currentPage === totalPages"
+          >
+            下一页
+          </button>
         </div>
       </div>
       <div class="col-md-4">
@@ -33,7 +46,9 @@
             <h3>热门标签</h3>
             <div class="tag-cloud">
               <span v-for="tag in hotTags" :key="tag.name" class="tag">
-                <router-link :to="`/tag/${encodeURIComponent(tag.name)}`">{{ tag.name }} ({{ tag.count }})</router-link>
+                <router-link :to="`/tag/${encodeURIComponent(tag.name)}`"
+                  >{{ tag.name }} ({{ tag.count }})</router-link
+                >
               </span>
             </div>
           </div>
@@ -44,50 +59,50 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { getPosts, getTags } from '../services/postService'
+import { ref, onMounted } from "vue";
+import { getPosts, getTags } from "../services/postService";
 
-const posts = ref([])
-const loading = ref(true)
-const currentPage = ref(1)
-const totalPages = ref(1)
-const hotTags = ref([])
+const posts = ref([]);
+const loading = ref(true);
+const currentPage = ref(1);
+const totalPages = ref(1);
+const hotTags = ref([]);
 
 const loadPosts = async () => {
-  loading.value = true
+  loading.value = true;
   try {
     // 获取文章列表
-    const allPosts = await getPosts()
-    
+    const allPosts = await getPosts();
+
     // 分页处理（假设每页 10 篇）
-    const pageSize = 10
-    const startIndex = (currentPage.value - 1) * pageSize
-    const endIndex = startIndex + pageSize
-    posts.value = allPosts.slice(startIndex, endIndex)
-    
+    const pageSize = 10;
+    const startIndex = (currentPage.value - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    posts.value = allPosts.slice(startIndex, endIndex);
+
     // 获取热门标签
-    const tags = await getTags()
-    hotTags.value = tags
-    
+    const tags = await getTags();
+    hotTags.value = tags;
+
     // 计算总页数
-    totalPages.value = Math.ceil(allPosts.length / pageSize)
+    totalPages.value = Math.ceil(allPosts.length / pageSize);
   } catch (error) {
-    console.error('Error loading posts:', error)
+    console.error("Error loading posts:", error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 const changePage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page
-    loadPosts()
+    currentPage.value = page;
+    loadPosts();
   }
-}
+};
 
 onMounted(() => {
-  loadPosts()
-})
+  loadPosts();
+});
 </script>
 
 <style scoped>
@@ -122,12 +137,15 @@ onMounted(() => {
 }
 
 .post-item {
+  display: block;
   background-color: #fff;
   padding: 30px;
   margin-bottom: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
+  text-decoration: none;
+  color: inherit;
 }
 
 .post-item:hover {
@@ -138,16 +156,6 @@ onMounted(() => {
 .post-title {
   font-size: 24px;
   margin-bottom: 15px;
-}
-
-.post-title a {
-  color: #333;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.post-title a:hover {
-  color: #007bff;
 }
 
 .post-meta {
@@ -251,21 +259,17 @@ onMounted(() => {
   gap: 10px;
 }
 
-
-
 @media (max-width: 992px) {
   .row {
     flex-direction: column;
   }
-  
+
   .col-md-4 {
     width: 100%;
   }
-  
+
   .sidebar {
     position: static;
   }
 }
-
-
 </style>
