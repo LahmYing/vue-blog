@@ -38,16 +38,17 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { getPostsByTag, getTags } from "../services/postService";
+import type { Post, Tag } from "../services/postService";
 
 const route = useRoute();
 
-const posts = ref([]);
+const posts = ref<Post[]>([]);
 const loading = ref(true);
-const allTags = ref([]);
+const allTags = ref<Tag[]>([]);
 
 const loadPosts = async () => {
   const tagName = route.params.tag;
@@ -107,12 +108,12 @@ onMounted(() => {
 }
 
 .post-list {
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 
 .post-item {
   display: block;
-  padding: 20px 0;
+  padding: 16px 0;
   border-bottom: 1px solid #eee;
   text-decoration: none;
   color: inherit;
@@ -124,21 +125,21 @@ onMounted(() => {
 
 .post-title {
   font-size: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 }
 
 .post-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
   font-size: 14px;
   color: #666;
 }
 
 .post-tags {
   display: flex;
-  gap: 10px;
+  gap: 16px;
 }
 
 .tag {

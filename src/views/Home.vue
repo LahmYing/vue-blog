@@ -17,7 +17,9 @@
                 <span class="post-date">{{ post.date }}</span>
                 <span class="post-tags">
                   <span v-for="tag in post.tags" :key="tag" class="tag">
-                    <router-link :to="`/tag/${tag}`">{{ tag }}</router-link>
+                    <router-link :to="`/tag/${encodeURIComponent(tag)}`">{{
+                      tag
+                    }}</router-link>
                   </span>
                 </span>
               </div>
@@ -58,15 +60,16 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { getPosts, getTags } from "../services/postService";
+import type { Post, Tag } from "../services/postService";
 
-const posts = ref([]);
+const posts = ref<Post[]>([]);
 const loading = ref(true);
 const currentPage = ref(1);
 const totalPages = ref(1);
-const hotTags = ref([]);
+const hotTags = ref<Tag[]>([]);
 
 const loadPosts = async () => {
   loading.value = true;
@@ -139,8 +142,8 @@ onMounted(() => {
 .post-item {
   display: block;
   background-color: #fff;
-  padding: 30px;
-  margin-bottom: 20px;
+  padding: 24px;
+  margin-bottom: 16px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
@@ -155,21 +158,21 @@ onMounted(() => {
 
 .post-title {
   font-size: 24px;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 }
 
 .post-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
   font-size: 14px;
   color: #666;
 }
 
 .post-tags {
   display: flex;
-  gap: 10px;
+  gap: 16px;
 }
 
 .tag {

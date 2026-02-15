@@ -40,11 +40,12 @@
   </div>
 </template>
 
-<script setup>
-import { ref, computed, onMounted } from "vue";
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
 import { getArchive } from "../services/postService";
+import type { Post } from "../services/postService";
 
-const groupedPosts = ref({});
+const groupedPosts = ref<Record<string, Record<string, Post[]>>>({});
 const loading = ref(true);
 
 const loadArchive = async () => {
@@ -91,24 +92,24 @@ onMounted(() => {
 }
 
 .year-group {
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 
 .year {
   font-size: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   color: #333;
   border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
+  padding-bottom: 8px;
 }
 
 .month {
-  margin-bottom: 30px;
+  margin-bottom: 24px;
 }
 
 .month-title {
   font-size: 18px;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
   color: #666;
 }
 
@@ -120,7 +121,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 16px 0;
   border-bottom: 1px dashed #eee;
   text-decoration: none;
   color: #333;

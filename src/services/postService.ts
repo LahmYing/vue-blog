@@ -3,16 +3,32 @@ import { parseMarkdown, generatePostId, formatDate } from '../utils/mdParser';
 // 动态加载所有 Markdown 文件
 const postModules = import.meta.glob('../data/posts/*.md', { query: '?raw', import: 'default' });
 
+// 定义文章类型
+export interface Post {
+  id: number;
+  title: string;
+  date: string;
+  tags: string[];
+  excerpt: string;
+  content: string;
+}
+
+// 定义标签类型
+export interface Tag {
+  name: string;
+  count: number;
+}
+
 // 缓存解析后的文章数据
-let cachedPosts = null;
+let cachedPosts: Post[] | null = null;
 
 // 解析所有文章
-async function parseAllPosts() {
+async function parseAllPosts(): Promise<Post[]> {
   if (cachedPosts) {
     return cachedPosts;
   }
 
-  const posts = [];
+  const posts: Post[] = [];
   let id = 1;
 
   // 遍历所有 Markdown 文件
@@ -38,9 +54,9 @@ async function parseAllPosts() {
         tags = tagsStr.split(',').map(tag => tag.trim());
       }
       
-      const post = {
+      const post: Post = {
         id: id++,
-        title: metadata.title || filename.replace('.md', ''),
+        title: metadata.title || filename?.replace('.md', '') || '',
         date: metadata.date ? formatDate(metadata.date) : new Date().toISOString().split('T')[0],
         tags: tags,
         excerpt: metadata.excerpt || parsedContent.substring(0, 200).replace(/\n/g, ' ').replace(/[#*`]/g, '') + '...',
@@ -54,7 +70,7 @@ async function parseAllPosts() {
   }
 
   // 按日期降序排序
-  posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+  posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   // 缓存结果
   cachedPosts = posts;
@@ -62,7 +78,7 @@ async function parseAllPosts() {
 }
 
 // 获取所有文章
-export function getPosts() {
+export function getPosts(): Promise<Post[]> {
   return new Promise(resolve => {
     parseAllPosts().then(posts => {
       resolve(posts);
@@ -71,7 +87,7 @@ export function getPosts() {
 }
 
 // 获取单个文章
-export function getPost(id) {
+export function getPost(id: number | string): Promise<Post | undefined> {
   return new Promise(resolve => {
     parseAllPosts().then(posts => {
       const post = posts.find(post => post.id == id);
@@ -81,10 +97,10 @@ export function getPost(id) {
 }
 
 // 获取标签列表
-export function getTags() {
+export function getTags(): Promise<Tag[]> {
   return new Promise(resolve => {
     parseAllPosts().then(posts => {
-      const tagCounts = {};
+      const tagCounts: Record<string, number> = {};
       
       posts.forEach(post => {
         post.tags.forEach(tag => {
@@ -96,14 +112,14 @@ export function getTags() {
         });
       });
       
-      const tags = Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
+      const tags: Tag[] = Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
       resolve(tags);
     });
   });
 }
 
 // 获取指定标签的文章
-export function getPostsByTag(tag) {
+export function getPostsByTag(tag: string): Promise<Post[]> {
   return new Promise(resolve => {
     parseAllPosts().then(posts => {
       // 解码标签名称，确保能够正确匹配包含特殊字符的标签
@@ -115,10 +131,10 @@ export function getPostsByTag(tag) {
 }
 
 // 获取归档数据
-export function getArchive() {
+export function getArchive(): Promise<Record<string, Record<string, Post[]>>> {
   return new Promise(resolve => {
     parseAllPosts().then(posts => {
-      const archive = {};
+      const archive: Record<string, Record<string, Post[]>> = {};
       
       posts.forEach(post => {
         const [year, month] = post.date.split('-');
@@ -137,7 +153,7 @@ export function getArchive() {
       
       // 按年份降序排序
       const sortedArchive = Object.fromEntries(
-        Object.entries(archive).sort(([yearA], [yearB]) => yearB - yearA)
+        Object.entries(archive).sort(([yearA], [yearB]) => parseInt(yearB) - parseInt(yearA))
       );
       
       resolve(sortedArchive);
@@ -146,8 +162,8 @@ export function getArchive() {
 }
 
 // 获取月份名称
-function getMonthName(month) {
-  const monthNames = {
+function getMonthName(month: string): string {
+  const monthNames: Record<string, string> = {
     '01': '一月',
     '02': '二月',
     '03': '三月',

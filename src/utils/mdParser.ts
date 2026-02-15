@@ -1,8 +1,8 @@
 // 解析 Markdown 文件，提取元数据和内容
-export function parseMarkdown(content, filename) {
+export function parseMarkdown(content: string, filename?: string) {
   // 提取 front matter
   const frontMatterMatch = content.match(/^---[\s\S]*?---\s*/);
-  let metadata = {};
+  let metadata: Record<string, string> = {};
   let markdownContent = content;
   
   if (frontMatterMatch) {
@@ -76,12 +76,12 @@ export function parseMarkdown(content, filename) {
 }
 
 // 生成文章 ID
-export function generatePostId(title) {
+export function generatePostId(title: string): string {
   return title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 }
 
 // 格式化日期
-export function formatDate(dateString) {
+export function formatDate(dateString: string): string {
   const date = new Date(dateString);
   return date.toISOString().split('T')[0];
 }
