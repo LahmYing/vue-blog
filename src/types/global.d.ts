@@ -6,7 +6,7 @@ declare module 'markdown-it' {
     constructor(options?: any);
     render(src: string): string;
   }
-  
+
   export default MarkdownIt;
 }
 

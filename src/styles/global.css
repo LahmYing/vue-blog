@@ -242,6 +242,18 @@ body {
 }
 
 /* Tag 页面样式 */
+.app.dark-mode .tag-content {
+  background-color: #2d2d2d !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  color: #e0e0e0 !important;
+}
+
+.app.dark-mode .archive-content {
+  background-color: #2d2d2d !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  color: #e0e0e0 !important;
+}
+
 .app.dark-mode .tag h1 {
   color: #e0e0e0 !important;
 }

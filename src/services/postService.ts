@@ -1,7 +1,10 @@
-import { parseMarkdown, generatePostId, formatDate } from '../utils/mdParser';
+import { parseMarkdown, formatDate } from '../utils/mdParser';
 
 // 动态加载所有 Markdown 文件
-const postModules = import.meta.glob('../data/posts/*.md', { query: '?raw', import: 'default' });
+const postModules = import.meta.glob('../data/posts/*.md', {
+  query: '?raw',
+  import: 'default',
+});
 
 // 定义文章类型
 export interface Post {
@@ -36,13 +39,16 @@ async function parseAllPosts(): Promise<Post[]> {
     try {
       // 获取文件名
       const filename = path.split('/').pop();
-      
+
       // 加载文件内容
       const content = await module();
-      
+
       // 解析 Markdown 文件
-      const { metadata, content: parsedContent } = parseMarkdown(content, filename);
-      
+      const { metadata, content: parsedContent } = parseMarkdown(
+        content,
+        filename
+      );
+
       // 构建文章对象
       let tags = ['未分类'];
       if (metadata.tags) {
@@ -51,18 +57,25 @@ async function parseAllPosts(): Promise<Post[]> {
         // 去除首尾的方括号
         tagsStr = tagsStr.replace(/^\[|\]$/g, '');
         // 分割标签并去除空格
-        tags = tagsStr.split(',').map(tag => tag.trim());
+        tags = tagsStr.split(',').map((tag) => tag.trim());
       }
-      
+
       const post: Post = {
         id: id++,
         title: metadata.title || filename?.replace('.md', '') || '',
-        date: metadata.date ? formatDate(metadata.date) : new Date().toISOString().split('T')[0],
+        date: metadata.date
+          ? formatDate(metadata.date)
+          : new Date().toISOString().split('T')[0],
         tags: tags,
-        excerpt: metadata.excerpt || parsedContent.substring(0, 200).replace(/\n/g, ' ').replace(/[#*`]/g, '') + '...',
-        content: parsedContent
+        excerpt:
+          metadata.excerpt ||
+          parsedContent
+            .substring(0, 200)
+            .replace(/\n/g, ' ')
+            .replace(/[#*`]/g, '') + '...',
+        content: parsedContent,
       };
-      
+
       posts.push(post);
     } catch (error) {
       console.error(`Error parsing post ${path}:`, error);
@@ -79,8 +92,8 @@ async function parseAllPosts(): Promise<Post[]> {
 
 // 获取所有文章
 export function getPosts(): Promise<Post[]> {
-  return new Promise(resolve => {
-    parseAllPosts().then(posts => {
+  return new Promise((resolve) => {
+    parseAllPosts().then((posts) => {
       resolve(posts);
     });
   });
@@ -88,9 +101,9 @@ export function getPosts(): Promise<Post[]> {
 
 // 获取单个文章
 export function getPost(id: number | string): Promise<Post | undefined> {
-  return new Promise(resolve => {
-    parseAllPosts().then(posts => {
-      const post = posts.find(post => post.id == id);
+  return new Promise((resolve) => {
+    parseAllPosts().then((posts) => {
+      const post = posts.find((post) => post.id == id);
       resolve(post);
     });
   });
@@ -98,12 +111,12 @@ export function getPost(id: number | string): Promise<Post | undefined> {
 
 // 获取标签列表
 export function getTags(): Promise<Tag[]> {
-  return new Promise(resolve => {
-    parseAllPosts().then(posts => {
+  return new Promise((resolve) => {
+    parseAllPosts().then((posts) => {
       const tagCounts: Record<string, number> = {};
-      
-      posts.forEach(post => {
-        post.tags.forEach(tag => {
+
+      posts.forEach((post) => {
+        post.tags.forEach((tag) => {
           if (tagCounts[tag]) {
             tagCounts[tag]++;
           } else {
@@ -111,8 +124,11 @@ export function getTags(): Promise<Tag[]> {
           }
         });
       });
-      
-      const tags: Tag[] = Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
+
+      const tags: Tag[] = Object.entries(tagCounts).map(([name, count]) => ({
+        name,
+        count,
+      }));
       resolve(tags);
     });
   });
@@ -120,11 +136,13 @@ export function getTags(): Promise<Tag[]> {
 
 // 获取指定标签的文章
 export function getPostsByTag(tag: string): Promise<Post[]> {
-  return new Promise(resolve => {
-    parseAllPosts().then(posts => {
+  return new Promise((resolve) => {
+    parseAllPosts().then((posts) => {
       // 解码标签名称，确保能够正确匹配包含特殊字符的标签
       const decodedTag = decodeURIComponent(tag);
-      const filteredPosts = posts.filter(post => post.tags.includes(decodedTag));
+      const filteredPosts = posts.filter((post) =>
+        post.tags.includes(decodedTag)
+      );
       resolve(filteredPosts);
     });
   });
@@ -132,30 +150,32 @@ export function getPostsByTag(tag: string): Promise<Post[]> {
 
 // 获取归档数据
 export function getArchive(): Promise<Record<string, Record<string, Post[]>>> {
-  return new Promise(resolve => {
-    parseAllPosts().then(posts => {
+  return new Promise((resolve) => {
+    parseAllPosts().then((posts) => {
       const archive: Record<string, Record<string, Post[]>> = {};
-      
-      posts.forEach(post => {
+
+      posts.forEach((post) => {
         const [year, month] = post.date.split('-');
         const monthName = getMonthName(month);
-        
+
         if (!archive[year]) {
           archive[year] = {};
         }
-        
+
         if (!archive[year][monthName]) {
           archive[year][monthName] = [];
         }
-        
+
         archive[year][monthName].push(post);
       });
-      
+
       // 按年份降序排序
       const sortedArchive = Object.fromEntries(
-        Object.entries(archive).sort(([yearA], [yearB]) => parseInt(yearB) - parseInt(yearA))
+        Object.entries(archive).sort(
+          ([yearA], [yearB]) => parseInt(yearB) - parseInt(yearA)
+        )
       );
-      
+
       resolve(sortedArchive);
     });
   });
@@ -175,7 +195,7 @@ function getMonthName(month: string): string {
     '09': '九月',
     '10': '十月',
     '11': '十一月',
-    '12': '十二月'
+    '12': '十二月',
   };
   return monthNames[month] || month;
 }

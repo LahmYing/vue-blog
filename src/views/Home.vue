@@ -61,9 +61,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { getPosts, getTags } from "../services/postService";
-import type { Post, Tag } from "../services/postService";
+import { ref, onMounted } from 'vue';
+import { getPosts, getTags } from '../services/postService';
+import type { Post, Tag } from '../services/postService';
 
 const posts = ref<Post[]>([]);
 const loading = ref(true);
@@ -90,7 +90,7 @@ const loadPosts = async () => {
     // 计算总页数
     totalPages.value = Math.ceil(allPosts.length / pageSize);
   } catch (error) {
-    console.error("Error loading posts:", error);
+    console.error('Error loading posts:', error);
   } finally {
     loading.value = false;
   }

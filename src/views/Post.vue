@@ -32,14 +32,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from "vue";
-import { useRoute } from "vue-router";
-import { getPost, getPosts } from "../services/postService";
-import type { Post } from "../services/postService";
-import MarkdownIt from "markdown-it";
+import { ref, computed, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { getPost, getPosts } from '../services/postService';
+import type { Post } from '../services/postService';
+import MarkdownIt from 'markdown-it';
 
 const route = useRoute();
-const postId = route.params.id;
 
 const post = ref<Post | null>(null);
 const loading = ref(true);
@@ -55,7 +54,7 @@ const md = new MarkdownIt({
 
 // 渲染 Markdown 内容
 const renderedContent = computed(() => {
-  if (!post.value) return "";
+  if (!post.value) return '';
   return md.render(post.value.content);
 });
 
@@ -87,7 +86,7 @@ const loadPost = async () => {
       }
     }
   } catch (error) {
-    console.error("Error loading post:", error);
+    console.error('Error loading post:', error);
   } finally {
     loading.value = false;
   }

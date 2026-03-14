@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted } from 'vue';
 
 // 主题切换逻辑
 const isDarkMode = ref(false);
@@ -48,9 +48,9 @@ const toggleTheme = () => {
 
 onMounted(() => {
   // 从本地存储中读取主题设置
-  const savedTheme = localStorage.getItem("darkMode");
+  const savedTheme = localStorage.getItem('darkMode');
   if (savedTheme !== null) {
-    isDarkMode.value = savedTheme === "true";
+    isDarkMode.value = savedTheme === 'true';
   }
 });
 </script>

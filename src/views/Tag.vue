@@ -39,10 +39,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
-import { useRoute } from "vue-router";
-import { getPostsByTag, getTags } from "../services/postService";
-import type { Post, Tag } from "../services/postService";
+import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { getPostsByTag, getTags } from '../services/postService';
+import type { Post, Tag } from '../services/postService';
 
 const route = useRoute();
 
@@ -62,7 +62,7 @@ const loadPosts = async () => {
     const tags = await getTags();
     allTags.value = tags;
   } catch (error) {
-    console.error("Error loading posts by tag:", error);
+    console.error('Error loading posts by tag:', error);
   } finally {
     loading.value = false;
   }

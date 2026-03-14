@@ -41,9 +41,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { getArchive } from "../services/postService";
-import type { Post } from "../services/postService";
+import { ref, onMounted } from 'vue';
+import { getArchive } from '../services/postService';
+import type { Post } from '../services/postService';
 
 const groupedPosts = ref<Record<string, Record<string, Post[]>>>({});
 const loading = ref(true);
@@ -54,7 +54,7 @@ const loadArchive = async () => {
     const archiveData = await getArchive();
     groupedPosts.value = archiveData;
   } catch (error) {
-    console.error("Error loading archive:", error);
+    console.error('Error loading archive:', error);
   } finally {
     loading.value = false;
   }

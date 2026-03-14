@@ -120,7 +120,7 @@
   .about-content {
     flex-direction: column;
   }
-  
+
   .about-sidebar {
     width: 100%;
   }
